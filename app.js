@@ -384,7 +384,7 @@ function receivedPostback(event) {
   else if(payload=="USER_DEFINED_PAYLOAD")
   {
        
-                sendTextMessage(senderID,getParamValuesByName("p1","Welcome to nielsen!"));
+                sendTextMessage(senderID,"Welcome to nielsen!");
               
       
   }   
