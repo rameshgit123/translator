@@ -16,11 +16,10 @@ const
   crypto = require('crypto'),
   express = require('express'),
   https = require('https'),  
-  request = require('request'),  
+  request = require('request'),
    vision = require('node-cloud-vision-api');
 
 var app = express();
-require('ssl-root-cas').inject();
 vision.init({ auth: 'AIzaSyBBd-AhSgjF76rAW0NKy20WeMdxx0dYKec' });
  //facebook sdk for get user inforamtion.
   var sdk = require('facebook-node-sdk');
@@ -65,7 +64,9 @@ if (!(APP_SECRET && VALIDATION_TOKEN && PAGE_ACCESS_TOKEN)) {
 //for send messages to users
 app.get('/sendmessage', function (req, res) {
     res.send('Facebook Messanger Bot...!');
-   
+    if (req.query['senderid'] != null) {
+    
+    }
 });
 
 //send custom messages to users
@@ -225,15 +226,87 @@ function receivedMessage(event) {
 
   if (messageText) {  
   writelog(senderID,messageText,"USER");
-  TranslatetoHindi(messageText,"","","", function (Lng) {
+      TranslatetoHindi(messageText,"","","", function (Lng) {
                 sendTextMessage(senderID,getParamValuesByName("p1",pCLatLng));
-                });  
-
+                });
+    // If we receive a text message, check to see if it matches any special
+    // keywords and send back the corresponding example. Otherwise, just echo
+    // the text we received.
+//    switch (messageText) {  
+//      case 'receipt':
+//        sendReceiptMessage(senderID);
+//        break;
+//      default:
+//        sendTextMessage(senderID, messageText);
+//    }
   } else if (messageAttachments) {
-   writelog(senderID,"User Sends "+messageAttachments[0].type+"","USER"); 
-     TranslatetoHindi("File received.","","","", function (Lng) {
-                sendTextMessage(senderID,getParamValuesByName("p1",pCLatLng));
-                });  
+   writelog(senderID,"User Sends "+messageAttachments[0].type+"","USER");
+ if(messageAttachments[0].type!="image")
+ { 
+   checkstatus(senderID,"file",messageAttachments[0].type,messageAttachments,"","","");
+   }
+   else{
+    //google vision for image uploads                 
+var req = new vision.Request({
+  image: new vision.Image({
+    url: ''+messageAttachments[0].payload.url+''
+  }),
+  features: [   
+    new vision.Feature('LABEL_DETECTION', 10),
+    new vision.Feature('LOGO_DETECTION', 5),     
+    new vision.Feature('TEXT_DETECTION', 10),
+  ]
+});
+
+
+// send single request
+vision.annotate(req).then((res) => {
+  // handling response
+  //console.log(JSON.stringify(res.responses));     
+  var lblobj=res.responses;  
+      var str = "";
+      var logos="";
+      var labelsinfo="";
+      var textinfo="";
+    if (lblobj[0].hasOwnProperty('logoAnnotations')) {   
+    for (var i = 0; i < lblobj[0].logoAnnotations.length; i++) {
+       if(i<lblobj[0].logoAnnotations.length-1)
+        str = str + " " + lblobj[0].logoAnnotations[i].description + " , ";
+        else
+        str = str + " " + lblobj[0].logoAnnotations[i].description + "";
+    }
+   logos=str;
+}
+    str = "";
+    if (lblobj[0].hasOwnProperty('textAnnotations')) {
+     
+          str = str + " " + lblobj[0].textAnnotations[0].description;
+          textinfo=str;      
+    }
+    str = ""
+    if (lblobj[0].hasOwnProperty('labelAnnotations')) {
+        for (var i = 0; i < lblobj[0].labelAnnotations.length; i++) {
+         if(i<lblobj[0].labelAnnotations.length-1)
+            str = str + " " + lblobj[0].labelAnnotations[i].description + " , ";
+            else
+             str = str + " " + lblobj[0].labelAnnotations[i].description + "";
+
+        }
+         labelsinfo=str;
+        
+         checkstatus(senderID,"file",messageAttachments[0].type,messageAttachments,textinfo,logos,labelsinfo);
+         
+    }
+}, (e) => {
+  console.log('Error: ', e)
+   sendTextMessage(senderId,e); 
+});
+
+
+   }
+   // sendTextMessage(senderID, "Message with attachment received");
+
+  }
 }
 
 
@@ -287,9 +360,7 @@ function receivedPostback(event) {
              fb.api('/' + senderID + '', function (err, data) {            
                      if (data) {  
                      writelog(senderID,"Yes","USER");                  
-                    TranslatetoHindi("Thank You!","","","", function (Lng) {
-                sendTextMessage(senderID,getParamValuesByName("p1",pCLatLng));
-                });
+                     assignmission(senderID,data.first_name+" "+data.last_name,data.profile_pic,"Q1YES",recipientID); 
                      }
                      }); 
      
@@ -302,9 +373,7 @@ function receivedPostback(event) {
    fb.api('/' + senderID + '', function (err, data) {            
                      if (data) {          
                       writelog(senderID,"No","USER");          
-                     TranslatetoHindi("Thank You!","","","", function (Lng) {
-                sendTextMessage(senderID,getParamValuesByName("p1",pCLatLng));
-                });
+                     assignmission(senderID,data.first_name+" "+data.last_name,data.profile_pic,"Q1NO",recipientID);   
                      
                     
                      }
@@ -314,39 +383,42 @@ function receivedPostback(event) {
   }  
   else if(payload=="USER_DEFINED_PAYLOAD")
   {
-    fb.api('/' + senderID + '', function (err, data) {            
-                     if (data) {         
-TranslatetoHindi("Hello! "+data.first_name+" "+data.last_name+", Welcome to Nielsen!!!","Have you purchased any Soft drinks today?","Yes","No", function (Lng) {
- sendTextMessage(senderID,getParamValuesByName("p1",pCLatLng));
-      var messageData = {
-        "attachment": {
-            "type": "template",
-            "payload": {
-                "template_type": "generic",
-                "elements": [{
-                    "title": ""+getParamValuesByName("p2",pCLatLng)+"",
-                    "subtitle": "",
-                    "buttons": [{
-                        "type": "postback",
-                        "title": ""+getParamValuesByName("p3",pCLatLng)+"",
-                        "payload": "Q1YES"
-                    }, {
-                        "type": "postback",
-                        "title": ""+getParamValuesByName("p4",pCLatLng)+"",
-                        "payload": "Q1NO"
-                    }]
-                }]
-            }
-        }
-    };
-    setTimeout(function () {         
-          sendGenericMessage(senderID,messageData); 
-        }, 500);
-       });
+       TranslatetoHindi("Welcome to nielsen!!","","","", function (Lng) {
+                sendTextMessage(senderID,getParamValuesByName("p1",pCLatLng));
+                });
+      
   }   
- 
-   }); 
-   }
+  else if(payload=="Q4NO")
+  {
+    writelog(senderID,"No","USER");
+  checkstatus(senderID,"Q4NO","text","");  
+  }
+   else if(payload=="Q4YES")
+  {
+    writelog(senderID,"Yes","USER");
+   checkstatus(senderID,"Q4YES","text","");  
+  }
+   else if(payload=="Q7NO")
+  {
+    writelog(senderID,"No","USER");
+  checkstatus(senderID,"Q7NO","text","");  
+  }
+   else if(payload=="Q7YES")
+  {
+    writelog(senderID,"Yes","USER");
+   checkstatus(senderID,"Q7YES","text","");  
+  }
+   else if(payload=="Q8NO")
+  {
+    writelog(senderID,"No","USER");
+  checkstatus(senderID,"Q8NO","text","");  
+  }
+   else if(payload=="Q8YES")
+  {
+    writelog(senderID,"Yes","USER");
+   checkstatus(senderID,"Q8YES","text","");  
+  }
+
   // When a postback is called, we'll send a message back to the sender to 
   // let them know it was successful
 
@@ -437,9 +509,7 @@ function callSendAPI(messageData) {
 }
 
 
-
 function TranslatetoHindi(p1,p2,p3,p4,callback) {
-
     request.post({
         "rejectUnauthorized": false,
         url: "https://www.googleapis.com/language/translate/v2",
@@ -464,52 +534,11 @@ function TranslatetoHindi(p1,p2,p3,p4,callback) {
 
 }
 
+
 //write logfile
 function writelog(sid,message,sendertype)
 {
-   console.log(message);
-
-//var http = require('http');
-//var rid="244341495958818";
-//    var logdetails = JSON.stringify({       
-//        'sid': '' + sid + '',
-//        'sendertype': '' + sendertype + '',
-//        'message': '' + message + '',
-//        'rid': ''+rid+''        
-//    });
-
-
-//    //5
-//    var extServeroptionspost = {
-//        host: '202.89.107.58',
-//        port: '80',
-//        path: '/BOTAPI/api/writelogso',
-//        method: 'POST',
-//        headers: {
-//            'Content-Type': 'application/json',
-//            'Content-Length': logdetails.length
-//        }
-//    };
-
-
-
-//    //6
-//    var reqPost = http.request(extServeroptionspost, function (res) {      
-//        res.on('data', function (data) {
-//            process.stdout.write(data);    
-//            var status=data.toString("utf8").replace('"', '').replace('"', '');
-//            console.log(status);                 
-//        });
-//    });
-
-
-//    // 7
-//    reqPost.write(logdetails);
-//    reqPost.end();
-//    reqPost.on('error', function (e) {
-//        console.error(e);
-//    });
-
+var s=sid;
 }
 
 //assigning mission
