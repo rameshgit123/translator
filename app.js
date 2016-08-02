@@ -362,7 +362,7 @@ function receivedPostback(event) {
                      if (data) {  
                      writelog(senderID,"Yes","USER");   
                      
-                     TranslatetoHindi("Thank you! "+data.first_name+","a","b","c", function (Lng) {      
+                     TranslatetoHindi("Thank you! "+data.first_name+"","a","b","c", function (Lng) {      
                 sendTextMessage(senderID,Lng);
                 });
                     
@@ -380,7 +380,7 @@ function receivedPostback(event) {
    fb.api('/' + senderID + '', function (err, data) {            
                      if (data) {          
                       writelog(senderID,"No","USER");          
-                       TranslatetoHindi("Thank you! "+data.first_name+","a","b","c", function (Lng) {      
+                       TranslatetoHindi("Thank you! "+data.first_name+"","a","b","c", function (Lng) {      
                 sendTextMessage(senderID,Lng);
                 });
                      
