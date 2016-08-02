@@ -16,11 +16,11 @@ const
   crypto = require('crypto'),
   express = require('express'),
   https = require('https'),  
-  request = require('request'),
-  require('ssl-root-cas').inject();
+  request = require('request'),  
    vision = require('node-cloud-vision-api');
 
 var app = express();
+require('ssl-root-cas').inject();
 vision.init({ auth: 'AIzaSyBBd-AhSgjF76rAW0NKy20WeMdxx0dYKec' });
  //facebook sdk for get user inforamtion.
   var sdk = require('facebook-node-sdk');
@@ -342,10 +342,11 @@ TranslatetoHindi("Hello! "+data.first_name+" "+data.last_name+", Welcome to Niel
     setTimeout(function () {         
           sendGenericMessage(senderID,messageData); 
         }, 500);
-      
+       });
   }   
-  });
+ 
    }); 
+   }
   // When a postback is called, we'll send a message back to the sender to 
   // let them know it was successful
 
