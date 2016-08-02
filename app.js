@@ -227,7 +227,7 @@ function receivedMessage(event) {
   if (messageText) {  
   writelog(senderID,messageText,"USER");
       TranslatetoHindi(messageText,"","","", function (Lng) {
-                sendTextMessage(senderID,getParamValuesByName("p1",pCLatLng));
+                sendTextMessage(senderID,getParamValuesByName("p1",Lng));
                 });
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
@@ -383,9 +383,9 @@ function receivedPostback(event) {
   }  
   else if(payload=="USER_DEFINED_PAYLOAD")
   {
-       TranslatetoHindi("Welcome to nielsen!!","","","", function (Lng) {
-                sendTextMessage(senderID,getParamValuesByName("p1",pCLatLng));
-                });
+       
+                sendTextMessage(senderID,getParamValuesByName("p1","Welcome to nielsen!"));
+              
       
   }   
   else if(payload=="Q4NO")
@@ -511,7 +511,7 @@ function callSendAPI(messageData) {
 
 function TranslatetoHindi(p1,p2,p3,p4,callback) {
     request.post({
-        "rejectUnauthorized": false,
+      //  "rejectUnauthorized": false,
         url: "https://www.googleapis.com/language/translate/v2",
         headers: { "X-HTTP-Method-Override": "GET" },
         form: {
