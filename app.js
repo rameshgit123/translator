@@ -405,7 +405,7 @@ function receivedPostback(event) {
             "payload": {
                 "template_type": "generic",
                 "elements": [{
-                    "title": "",
+                    "title": ""+Lng+"",
                     "subtitle": "",
                     "buttons": [{
                         "type": "postback",
