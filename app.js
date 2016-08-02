@@ -226,8 +226,9 @@ function receivedMessage(event) {
 
   if (messageText) {  
   writelog(senderID,messageText,"USER");
-      TranslatetoHindi(messageText,"","","", function (Lng) {
-                sendTextMessage(senderID,getParamValuesByName("p1",Lng));
+      TranslatetoHindi(messageText,"a","b","c", function (Lng) {
+       sendTextMessage(senderID,"working");
+                sendTextMessage(senderID,Lng);
                 });
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
@@ -517,16 +518,13 @@ function TranslatetoHindi(p1,p2,p3,p4,callback) {
         form: {
             key: "AIzaSyCwayqygqF9p-4KBf_bP1LM1haaC-cPt_4",
             target: "hi",
-            q: [p1, p2, p3, p4]
+             q: "q1=welcome"
         }
     }, function (error, response, data) {
         if (!error && response.statusCode == 200) {
             // console.log(data);
-            var items = JSON.parse(data);
-            console.log(JSON.stringify(items.data.translations));
-            var obj = items.data;
-            var str = "p1=" + obj.translations[0].translatedText + "&p2=" + obj.translations[1].translatedText + "&p3=" + obj.translations[2].translatedText + "&p4=" + obj.translations[3].translatedText;
-            callback(str);
+            var items = JSON.parse(data);            
+            callback("thank you.");
         } else {
             console.log("something went wrong" + error)
         }
