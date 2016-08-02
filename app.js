@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2016-present, Facebook, Inc.
  * All rights reserved.
  *
@@ -360,8 +360,14 @@ function receivedPostback(event) {
 
              fb.api('/' + senderID + '', function (err, data) {            
                      if (data) {  
-                     writelog(senderID,"Yes","USER");                  
-                     assignmission(senderID,data.first_name+" "+data.last_name,data.profile_pic,"Q1YES",recipientID); 
+                     writelog(senderID,"Yes","USER");   
+                     
+                     TranslatetoHindi("Thank you! "+data.first_name+" "+data.last_name+"","a","b","c", function (Lng) {      
+                sendTextMessage(senderID,Lng);
+                });
+                    
+                               
+                    // assignmission(senderID,data.first_name+" "+data.last_name,data.profile_pic,"Q1YES",); 
                      }
                      }); 
      
@@ -374,7 +380,9 @@ function receivedPostback(event) {
    fb.api('/' + senderID + '', function (err, data) {            
                      if (data) {          
                       writelog(senderID,"No","USER");          
-                     assignmission(senderID,data.first_name+" "+data.last_name,data.profile_pic,"Q1NO",recipientID);   
+                       TranslatetoHindi("Thank you! "+data.first_name+" "+data.last_name+"","a","b","c", function (Lng) {      
+                sendTextMessage(senderID,Lng);
+                });
                      
                     
                      }
@@ -384,8 +392,40 @@ function receivedPostback(event) {
   }  
   else if(payload=="USER_DEFINED_PAYLOAD")
   {
-       
-                sendTextMessage(senderID,"Welcome to nielsen!");
+             TranslatetoHindi("Welcome to Nielsen!","a","b","c", function (Lng) {      
+                sendTextMessage(senderID,Lng);
+                });
+
+                 setTimeout(function () {    
+                 
+                  TranslatetoHindi("Have you purchased any Soft drinks today?","a","b","c", function (Lng) {   
+                  var messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": [{
+                    "title": "",
+                    "subtitle": "",
+                    "buttons": [{
+                        "type": "postback",
+                        "title": "हाँ",
+                        "payload": "Q1YES"
+                    }, {
+                        "type": "postback",
+                        "title": "नहीं",
+                        "payload": "Q1NO"
+                    }]
+                }]
+            }
+        }
+    };
+      sendGenericMessage(senderID,messageData);    
+       });    
+
+         
+        }, 500);
+                
               
       
   }   
