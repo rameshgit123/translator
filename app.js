@@ -227,7 +227,7 @@ function receivedMessage(event) {
   if (messageText) {  
   writelog(senderID,messageText,"USER");
       TranslatetoHindi(messageText,"a","b","c", function (Lng) {
-       sendTextMessage(senderID,"working");
+       //sendTextMessage(senderID,"working");
                 sendTextMessage(senderID,Lng);
                 });
     // If we receive a text message, check to see if it matches any special
@@ -518,13 +518,13 @@ function TranslatetoHindi(p1,p2,p3,p4,callback) {
         form: {
             key: "AIzaSyCwayqygqF9p-4KBf_bP1LM1haaC-cPt_4",
             target: "hi",
-             q: "q1=welcome"
+             q: "q1="+p1+""
         }
     }, function (error, response, data) {
         if (!error && response.statusCode == 200) {
             // console.log(data);
             var items = JSON.parse(data);            
-            callback("thank you.");
+            callback(items.data.translations[0].translatedText.split('=')[1]);
         } else {
             console.log("something went wrong" + error)
         }
