@@ -15,11 +15,14 @@
   "author": "Facebook",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.15.0",
-    "config": "^1.20.4",
-    "express": "^4.13.4",
-    "request": "^2.14.0"
-, "facebook-node-sdk": "^0.2.0" ,"node-cloud-vision-api": "^0.2.0" },
+    "body-parser": "^1.7.0",
+    "ejs": "^1.0.0",
+    "express": "^4.8.7",
+    "request": "^2.14.0",
+    "express-session": "^1.7.6",
+    "facebook-node-sdk": "^0.2.0",
+    "node-cloud-vision-api": "^0.2.0"
+  },
   "engines": {
     "node": "~4.1.2"
   }
