@@ -227,11 +227,44 @@ function receivedMessage(event) {
   if (messageText) {  
       writelog(senderID,messageText,"USER");
 
-      TranslatetoMalay(messageText,"a","b","c", function (Lng) {                   
-          sendTextMessage(senderID,Lng);
-      });
+      if(messageText=="#r123")
+      {
+          var messageData = {
+              "attachment": {
+                  "type": "template",
+                  "payload": {
+                      "template_type": "generic",
+                      "elements": [{
+                          "title": "Select Your Language",
+                          "subtitle": "",
+                          "buttons": [{
+                              "type": "postback",
+                              "title": "Melayu",
+                              "payload": "Q1YES"
+                          }, {
+                              "type": "postback",
+                              "title": "普通话",
+                              "payload": "Q1NO"
+                          }, {
+                              "type": "postback",
+                              "title": "English",
+                              "payload": "English"
+                          }
+                      
+                          ]
+                      }]
+                  }
+              }
+          };
+          sendGenericMessage(senderID,messageData);      
+      }
+      else{
 
-  
+          TranslatetoMalay(messageText,"a","b","c", function (Lng) {                   
+              sendTextMessage(senderID,Lng);
+          });
+
+      }
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
     // the text we received.
