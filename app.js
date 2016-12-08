@@ -370,8 +370,13 @@ function receivedPostback(event) {
      
       TranslatetoMandarin("You Have Selected Mandarin Language","a","b","c", function (Lng) {                   
           sendTextMessage(senderID,Lng);
-      });
+      }); 
  
+  }  
+
+  else if(payload=="English")
+  {                     
+          sendTextMessage(senderID,"You Have Selected English Language");    
  
   }  
   else if(payload=="USER_DEFINED_PAYLOAD")
@@ -387,13 +392,19 @@ function receivedPostback(event) {
                       "subtitle": "",
                       "buttons": [{
                           "type": "postback",
-                          "title": "Malay",
+                          "title": "Melayu",
                           "payload": "Q1YES"
                       }, {
                           "type": "postback",
-                          "title": "Mandarin",
+                          "title": "普通话",
                           "payload": "Q1NO"
-                      }]
+                      }, {
+                          "type": "postback",
+                          "title": "English",
+                          "payload": "English"
+                      }
+                      
+                      ]
                   }]
               }
           }
