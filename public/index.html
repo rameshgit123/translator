@@ -83,6 +83,14 @@
 
         };
 
+        $(document).ready(function () {
+            $(".dropdown-menu li a").click(function () {
+                $(".btn:first-child").text($(this).text());
+                $(".btn:first-child").val($(this).text());
+
+            });
+
+        });
         function  addrows()
         {
             
@@ -90,6 +98,11 @@
      $trLast = $tableBody.find("tr:last"),
      $trNew = $trLast.clone();
             $trLast.after($trNew);
+            $(".dropdown-menu li a").click(function () {
+                $(".btn:first-child").text($(this).text());
+                $(".btn:first-child").val($(this).text());
+
+            })
          
         }
 
