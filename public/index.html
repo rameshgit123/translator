@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="robots" content="noindex">
 
-    <title>Responsive Shopping Cart - Bootsnipp.com</title>
+    <title>Add Items</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <style type="text/css">
@@ -68,15 +68,16 @@
         function  addrows()
         {
             alert("ok");
-            $("table tr:eq(1)").clone().end().appendTo("table");
+            $("table tr").eq(0).clone().end().appendTo("table");
          
         }
     </script>
 </head>
 <body>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-    <h1 style="font-family:Arial;font-size:18px;color:#07C">Add Items</h1>
+    
     <div class="container">
+        <h1 style="font-family:Arial;font-size:18px;color:#07C">Add Items</h1>
         <table id="cart" class="table table-hover table-condensed">
             <thead>
                 <tr>
