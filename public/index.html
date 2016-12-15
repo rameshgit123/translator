@@ -68,7 +68,10 @@
         function  addrows()
         {
             alert("ok");
-            $("table tr").eq(1).clone().end().appendTo("table");
+            var $tableBody = $('#cart').find("tbody"),
+     $trLast = $tableBody.find("tr:last"),
+     $trNew = $trLast.clone();
+            $trLast.after($trNew);
          
         }
     </script>
