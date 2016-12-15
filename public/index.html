@@ -76,21 +76,30 @@
         $(document).ready(function () {
             var iframe_height = parseInt($('html').height());
             window.parent.postMessage(iframe_height, 'http://bootsnipp.com');
+          
+
         });
+        function  addrows()
+        {
+            alert("ok");
+            $("table tr:second").clone().end().appendTo("table");
+         
+        }
     </script>
 </head>
 <body>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <h1 style="font-family:Arial;font-size:18px;color:#07C">Add Items</h1>
     <div class="container">
         <table id="cart" class="table table-hover table-condensed">
             <thead>
                 <tr>
-                    <th style="width: 50%">Product</th>
-                      <th style="width: 50%">Pack Size</th>
+                    <th style="width: 30%">Product</th>
+                      <th style="width: 30%">Pack Size</th>
                    <!-- <th style="width: 10%">Price</th>-->
-                    <th style="width: 8%">Quantity</th>
+                    <th style="width: 20%">Quantity</th>
                   <!--  <th style="width: 22%" class="text-center">Subtotal</th>-->
-                    <th style="width: 10%"></th>
+                    <th style="width: 20%"></th>
                 </tr>
             </thead>
             <tbody>
@@ -112,7 +121,7 @@
                     </td>
                       <td data-th="Pack-size">
                         <div class="dropdown">
-                                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" onclick="addrows()">
                                         Pack Size
                                    <span class="caret"></span>
                                     </button>
@@ -128,6 +137,7 @@
 
                    <!-- <td data-th="Price">$1.99</td>-->
                     <td data-th="Quantity">
+                        Quantity
                         <input type="number" class="form-control text-center" value="1">
                     </td>
                  <!--   <td data-th="Subtotal" class="text-center">1.99</td>-->
