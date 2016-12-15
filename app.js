@@ -232,7 +232,7 @@ function receivedMessage(event) {
   if (messageText) {  
       writelog(senderID,messageText,"USER");
 
-      if(text=="webview")
+      if(messageText=="webview")
       {
           sendwebview(senderID);
           return false;
