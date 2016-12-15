@@ -41,10 +41,7 @@
                 min-width: 320px;
             }
 
-            table#cart tbody tr td:first-child {
-                background: #333;
-                color: #fff;
-            }
+          
 
             table#cart tbody td:before {
                 content: attr(data-th);
@@ -67,22 +64,11 @@
     <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script type="text/javascript">
-        window.alert = function () { };
-        var defaultCSS = document.getElementById('bootstrap-css');
-        function changeCSS(css) {
-            if (css) $('head > link').filter(':first').replaceWith('<link rel="stylesheet" href="' + css + '" type="text/css" />');
-            else $('head > link').filter(':first').replaceWith(defaultCSS);
-        }
-        $(document).ready(function () {
-            var iframe_height = parseInt($('html').height());
-            window.parent.postMessage(iframe_height, 'http://bootsnipp.com');
-          
-
-        });
+        
         function  addrows()
         {
             alert("ok");
-            $("table tr:second").clone().end().appendTo("table");
+            $("table tr:eq(1)").clone().end().appendTo("table");
          
         }
     </script>
@@ -121,7 +107,7 @@
                     </td>
                       <td data-th="Pack-size">
                         <div class="dropdown">
-                                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" onclick="addrows()">
+                                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" >
                                         Pack Size
                                    <span class="caret"></span>
                                     </button>
@@ -142,7 +128,7 @@
                     </td>
                  <!--   <td data-th="Subtotal" class="text-center">1.99</td>-->
                     <td class="actions" data-th="">
-                        <button class="btn btn-info btn-sm"><i class="fa fa-plus"></i></button>
+                        <button class="btn btn-info btn-sm"><i class="fa fa-plus" onclick="addrows()"></i></button>
                         <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
                     </td>
                 </tr>
