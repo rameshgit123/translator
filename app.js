@@ -69,6 +69,11 @@ app.get('/sendmessage', function (req, res) {
     }
 });
 
+app.get('/savedata', function (req, res) {    
+    sendTextMessage(req.query['senderid'], "Your data has been saved.");
+    res.sendStatus(200); 
+});
+
 //send custom messages to users
 //for send messages to users
 app.get('/sendcustommessage', function (req, res) {  
@@ -226,6 +231,12 @@ function receivedMessage(event) {
 
   if (messageText) {  
       writelog(senderID,messageText,"USER");
+
+      if(text=="webview")
+      {
+          sendwebview(senderID);
+          return false;
+      }
 
       if(messageText=="#r123")
       {
@@ -540,6 +551,39 @@ function sendGenericMessage(recipientId,MessageTemplate) {
   callSendAPI(messageData);
 }
 
+
+function sendwebview(id)
+{
+    var url="https://ntranslator.herokuapp.com/?id="+id+"";
+    var messageData = {        
+        "recipient":{
+            "id": id
+        },
+        "message": {
+            "attachment":{
+                "payload":{
+                    "elements":[{
+                        "buttons": [{
+                            "title":"Buy Items",
+                            "type":"web_url",
+                            "url":url,
+                            "messenger_extensions": true, 
+                            "webview_height_ratio":"compact"
+                        }],                              
+                        "subtitle":"",
+                        "title":"Buy Items"
+                    }],
+                    "template_type":"generic"
+                },
+                "type":"template"
+            }
+        }        
+    };  
+
+    callSendAPI(messageData);
+
+    
+}
 
 /*
  * Call the Send API. The message data goes in the body. If successful, we'll 
