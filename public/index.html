@@ -65,14 +65,63 @@
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script type="text/javascript">
         
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.com/en_US/messenger.Extensions.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'Messenger'));
+
+        window.extAsyncInit = function () {
+            MessengerExtensions.getUserID(function success(uids) {
+                var psid = uids.psid;
+                $("#Userid").html(psid);
+            }, function error(err) {
+                alert(err);
+            });
+
+        };
+
         function  addrows()
         {
-            alert("ok");
+            
             var $tableBody = $('#cart').find("tbody"),
      $trLast = $tableBody.find("tr:last"),
      $trNew = $trLast.clone();
             $trLast.after($trNew);
          
+        }
+
+        function deleterows(obj) {
+            $(obj).parent().parent().remove();
+        }
+
+        function closewindow() {
+            $.ajax({
+                type: 'get',
+                url: 'https://ntranslator.herokuapp.com/savedata?senderid=' + getParameterByName('id') + '',
+                success: function (data) {
+                    // use data
+                    window.close();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    window.close();
+                }
+            });
+
+        }
+
+        function getParameterByName(name, url) {
+            if (!url) {
+                url = window.location.href;
+            }
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
         }
     </script>
 </head>
@@ -81,6 +130,7 @@
     
     <div class="container">
         <h1 style="font-family:Arial;font-size:18px;color:#07C">Add Items</h1>
+         <div style="color:blueviolet;font-size:18px;font-weight:bold"> USER ID : <span style="color:blue;font-size:18px;font-weight:bold" id="Userid"></span></div>
         <table id="cart" class="table table-hover table-condensed">
             <thead>
                 <tr>
@@ -127,13 +177,13 @@
 
                    <!-- <td data-th="Price">$1.99</td>-->
                     <td data-th="Quantity">
-                        Quantity
+                        <br />
                         <input type="number" class="form-control text-center" value="1">
                     </td>
                  <!--   <td data-th="Subtotal" class="text-center">1.99</td>-->
                     <td class="actions" data-th="">
                         <button class="btn btn-info btn-sm"><i class="fa fa-plus" onclick="addrows()"></i></button>
-                        <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
+                        <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o" onclick="deleterows(this)"></i></button>
                     </td>
                 </tr>
             </tbody>
@@ -141,11 +191,10 @@
                 <tr class="visible-xs">
                     <td class="text-center"><strong>Total 1.99</strong></td>
                 </tr>
-                <tr>
-                    <td><a href="#" class="btn btn-warning"><i class="fa fa-angle-left"></i>Continue Shopping</a></td>
+                <tr>               
                     <td colspan="2" class="hidden-xs"></td>
-                    <td class="hidden-xs text-center"><strong>Total $1.99</strong></td>
-                    <td><a href="#" class="btn btn-success btn-block">Checkout <i class="fa fa-angle-right"></i></a></td>
+                    <td class="hidden-xs text-center"><strong>Total $11.99</strong></td>
+                    <td><a href="#" class="btn btn-success btn-block" onclick="closewindow()">Checkout <i class="fa fa-angle-right"></i></a></td>
                 </tr>
             </tfoot>
         </table>
